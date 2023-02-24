@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <script type="module">
+    import { Product } from './productClass.js';
+    import { filterArray } from './filterArray.js';
+    let array = [];
+    for (let i = 0; i < 10; i++) {
+      array[i] = new Product(
+        `Any${i + 1}`,
+        `${(i + 1) * 10}`,
+        `${i + 1}`,
+        `desc${i + 1}`
+      );
+    }
+    array.push(new Product('Test pgf', '2', '2', '2'));
+    array.push(new Product('Test pgf2', '24', '23', ''));
+
+    let string = 'name-contains-f&price->2&quantity->=1&description-ends-';
+    alert(filterArray(string, array));
+  </script>
+</html>
