@@ -1,24 +1,11 @@
-//4 метода: сложения, умножения, вычитания и деления.
-function divisionNumbersV1(...args) {        //Using BigInt
-    if (args.length == 0) {
-        //Не уверен, лучше Exception выбросить или бросить null
-        //throw new Error("No arguments");
-        return null;
-    }
-    let result = BigInt(args[0]);
-
-    for (let index = 1; index < args.length; index++) {
-        result /= BigInt(args[index]);
-    }
-
-    //return result;                  // return BigInt
-    return String(result);            // return string
-}
-
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////
-
-function isFirstBigger(first, second) {                             //service func
+/**
+    * `[Service Function]`Check if first string is same or bigger than second`
+    * 
+    * @param {string} first First string
+    * @param {string} second Second string
+    * @returns {boolean} Return true/false if `first` string more than `second` or strings are same
+    */
+function isFirstBiggerOrSame(first, second) {                             //service func
 
     first = (first[0] == "-") ? first.slice(1) : first;
     second = (second[0] == "-") ? second.slice(1) : second;
@@ -45,22 +32,23 @@ function isFirstBigger(first, second) {                             //service fu
     return true;
 }
 
-function concatResult(array) {                                  //service func
+/**
+    * `[Service Function]`Parse array, make normal view and create string`
+    * 
+    * @param {Array} array Input array. Reversed.
+    * @param {boolean} isNegative Flag, if need to set `"-"` first
+    * @returns {string} Return beautiful `string`
+    */
+function concatResult(array, isNegative) {                                //service func
 
+    array.reverse();
     let result = [];
 
-    for (let index = array.length - 1; index >= 0; index--) {
+    for (let index = 0; index < array.length; index++) {
+
         let tmpString = `${array[index]}`;
 
-        if (index == array.length - 1) {
-
-            if (array[index] != 0) {
-                result.push(tmpString);
-            }
-            continue;
-        }
-
-        if (tmpString[0] == "-" && result.length > 0) {
+        if (index != 0 && isNegative) {
             tmpString = tmpString.slice(1);
         }
 
@@ -70,12 +58,28 @@ function concatResult(array) {                                  //service func
             }
         }
 
-        result.push(tmpString);
+        if (array[index] == 0 && result.length > 0) {
+            result.push(tmpString);
+        }
 
+        if (array[index] != 0) {
+            result.push(tmpString);
+        }
     }
+
+    if (result.length == 0) {
+        return "0";
+    }
+
     return result.join("");
 }
-
+/**
+    * `[Service Function]`Split string for pieces of a certain size
+    * 
+    * @param {string} string Input string for splitting
+    * @param {number} countOfDigits Count of digits
+    * @returns {number} Return array of numbers
+    */
 function splitNumber(string, countOfDigits) {                                  //service func
 
     let result = [];
@@ -113,6 +117,14 @@ function splitNumber(string, countOfDigits) {                                  /
     return result;
 }
 
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/**
+    * Count sum of any numbers. Get unlimited count of args separed by `","` but more than `0`
+    * 
+    * @param {string} args Input numbers as strings
+    * @returns {string} Return string of summed numbers
+    */
 function sumNumbers(...args) {       //Строка проверна на пробелы, неправильные символы
 
     if (args.length == 0) {
@@ -126,6 +138,7 @@ function sumNumbers(...args) {       //Строка проверна на про
     }
 
     let result = "";
+
     for (let i = 0; i < args.length; i++) {
 
         if (result.length == 0) {
@@ -133,7 +146,7 @@ function sumNumbers(...args) {       //Строка проверна на про
             continue;
         }
 
-        let checkedFirstNumber = isFirstBigger(result, args[i]);
+        let checkedFirstNumber = isFirstBiggerOrSame(result, args[i]);
         result = splitNumber(result, 10);
         let nextNumber = splitNumber(args[i], 10);
         let resultIsNegative = (result[0] < 0) ? true : false;
@@ -156,9 +169,11 @@ function sumNumbers(...args) {       //Строка проверна на про
 
             if (resultIsNegative ^ nextNumberIsNegative) {
                 if (!checkedFirstNumber) {
+
                     let temp = tmpFirstNumber;
                     tmpFirstNumber = tmpSecondNumber;
                     tmpSecondNumber = temp;
+
                 }
             }
 
@@ -186,12 +201,18 @@ function sumNumbers(...args) {       //Строка проверна на про
             tmpResult.push(tmpNumber);
         }
 
-        result = concatResult(tmpResult);
+        result = (result[0] < 0) ? concatResult(tmpResult, true) : concatResult(tmpResult, false);
     }
     return result;
 }
 
-function differenceNumbers(...args) {       //Строка проверна на пробелы, неправильные символы
+/**
+    * Count difference between any numbers. Get unlimited count of args separed by `","` but more than `0`
+    * 
+    * @param {string} args Input numbers as strings
+    * @returns {string} Return string of subtracted numbers
+    */
+function subtractionNumbers(...args) {       //Строка проверна на пробелы, неправильные символы
 
     if (args.length == 0) {
         //Не уверен, лучше Exception выбросить или бросить null
@@ -220,36 +241,18 @@ function differenceNumbers(...args) {       //Строка проверна на
         } else if ((firstNumberAsString[0] == "-" && secondNumberAsString[0] == "-") || (firstNumberAsString[0] != "-" && secondNumberAsString[0] == "-")) {
             secondNumberAsString = secondNumberAsString.slice(1);
         }
-        
+
         result = sumNumbers(firstNumberAsString, secondNumberAsString);             //Переиспользование кода это вроде хорошо)
     }
     return result;
 }
 
-function divisionNumbers(...args) {       //Строка проверна на пробелы, неправильные символы
-
-    if (args.length == 0) {
-        //Не уверен, лучше Exception выбросить или бросить null
-        //throw new Error("No arguments");
-        return null;
-    }
-
-    if (args.length == 1) {
-        return args[0];
-    }
-
-    let result = "";
-
-    for (let i = 0; i < args.length; i++) {
-        if (result.length == 0) {
-            result = args[0];
-            continue;
-        }
-
-    }
-    return result;
-}
-
+/**
+    * Multiply numbers one after another. Get unlimited count of args separed by `","` but more than `0`
+    * 
+    * @param {string} args Input numbers as strings
+    * @returns {string} Return string of multiply numbers
+    */
 function multiplyNumbers(...args) {       //Строка проверна на пробелы, неправильные символы
 
     if (args.length == 0) {
@@ -257,7 +260,7 @@ function multiplyNumbers(...args) {       //Строка проверна на �
         //throw new Error("No arguments");
         return null;
     }
-    
+
     if (args.length == 1) {
         return args[0];
     }
@@ -267,11 +270,13 @@ function multiplyNumbers(...args) {       //Строка проверна на �
     for (let i = 0; i < args.length; i++) {
 
         if (result.length == 0) {
+
             result = args[0];
             continue;
+
         }
 
-        let checkedFirstNumber = isFirstBigger(result, args[i]);
+        let checkedFirstNumber = isFirstBiggerOrSame(result, args[i]);
         let resultIsNegative = (result[0] == "-") ? true : false;
         let nextNumberIsNegative = (args[i][0] == "-") ? true : false;
         result = (resultIsNegative) ? splitNumber(result.slice(1), 1) : splitNumber(result, 1);
@@ -279,20 +284,21 @@ function multiplyNumbers(...args) {       //Строка проверна на �
         let tmpResult = [];
         let tmpNumber = 0;
         let tmpDigit = 0;
-        let tmpFIndex = 0;
-        let tmpSIndex = 0;
-        let tmpTIndex = 0;
+        let tmpFirstIndex = 0;
+
 
         if (checkedFirstNumber) {
-            let tmp = result;
+
+            let forSwitch = result;
             result = nextNumber;
-            nextNumber = tmp;
+            nextNumber = forSwitch;
+
         }
         for (let i = 0; i < result.length; i++) {
 
             let tmpArray = [];
-            tmpFIndex = tmpSIndex;
-            tmpTIndex = 0;
+            let tmpSecondIndex = 0;
+            tmpFirstIndex = i;
 
             for (let j = 0; j < nextNumber.length; j++) {
 
@@ -314,33 +320,31 @@ function multiplyNumbers(...args) {       //Строка проверна на �
 
             tmpDigit = 0;
 
-            while (tmpTIndex < tmpArray.length) {
+            while (tmpSecondIndex < tmpArray.length) {
 
                 if (tmpResult.length == 0) {
                     tmpResult = [...tmpArray];
                     break;
                 }
 
-                if (tmpResult[tmpFIndex] == (undefined)) {
-                    tmpResult.push(tmpArray[tmpTIndex] + tmpDigit);
+                if (tmpResult[tmpFirstIndex] == (undefined)) {
+                    tmpResult.push(tmpArray[tmpSecondIndex]);
                 } else {
-                    tmpResult[tmpFIndex] = tmpResult[tmpFIndex] + tmpArray[tmpTIndex];
+                    tmpResult[tmpFirstIndex] = tmpResult[tmpFirstIndex] + tmpArray[tmpSecondIndex];
                 }
 
-                if (tmpResult[tmpFIndex] > 9) {
-                    if (tmpResult[tmpFIndex + 1] == undefined) {
-                        tmpResult.push(parseInt(tmpResult[tmpFIndex] / 10));
+                if (tmpResult[tmpFirstIndex] > 9) {
+                    if (tmpResult[tmpFirstIndex + 1] == undefined) {
+                        tmpResult.push(parseInt(tmpResult[tmpFirstIndex] / 10));
                     } else {
-                        tmpResult[tmpFIndex + 1] += parseInt(tmpResult[tmpFIndex] / 10);
+                        tmpResult[tmpFirstIndex + 1] += parseInt(tmpResult[tmpFirstIndex] / 10);
                     }
-                    tmpResult[tmpFIndex] = tmpResult[tmpFIndex] % 10;
+                    tmpResult[tmpFirstIndex] = tmpResult[tmpFirstIndex] % 10;
                 }
 
-                tmpTIndex++;
-                tmpFIndex++;
+                tmpSecondIndex++;
+                tmpFirstIndex++;
             }
-
-            tmpSIndex++;
         }
         result = tmpResult.reverse().join("");
 
@@ -350,15 +354,101 @@ function multiplyNumbers(...args) {       //Строка проверна на �
     }
     return result;
 }
-const sameBigint = "1999999999999999999999999999999999999999";
-const sameBigint2 = "1999999999999999999999999999999999999999";
-// const sameBigint = "91099";
-// const sameBigint2 = "9099";
-//const sameBigint3 = "51234567890123456789012345678901234567890";
 
-// console.log(2**53);
-// console.log(999999*999999);   //max 6 "9";
-// console.log(1e12);
+/**
+    * Divide first number by others numbers. Get unlimited count of args separed by `","` but more than `0`
+    * 
+    * @param {string} args Input numbers as strings
+    * @returns {string} Return string of multiply numbers
+    */
+function divideNumbers(...args) {       //Строка проверна на пробелы, неправильные символы
 
-console.log(divisionNumbers(sameBigint, sameBigint2));
-console.log(divisionNumbersV1(sameBigint, sameBigint2));
+    if (args.length == 0) {
+        //Не уверен, лучше Exception выбросить или бросить null
+        //throw new Error("No arguments");
+        return null;
+    }
+
+    if (args.length == 1) {
+        return args[0];
+    }
+
+    let result = "";
+
+    for (let i = 0; i < args.length; i++) {
+
+        if (result.length == 0) {
+            result = args[0];
+            continue;
+        }
+
+        if (result == "0") {
+            return result;
+        }
+
+        let resultIsNegative = (result[0] == "-") ? true : false;
+        let nextNumberIsNegative = (args[i][0] == "-") ? true : false;
+        result = (resultIsNegative) ? result.slice(1) : result;
+        let nextNumber = (nextNumberIsNegative) ? args[i].slice(1) : args[i];
+        let currentNumber = result.slice(0, nextNumber.length);
+        let tmpResult = [];
+        let checkIndex = nextNumber.length - 1;
+
+        if (!isFirstBiggerOrSame(currentNumber, nextNumber)) {
+
+            currentNumber += result[checkIndex];
+            checkIndex++;
+        }
+
+
+        if (result === nextNumber) {
+            if (resultIsNegative ^ nextNumberIsNegative) {
+                result = "-" + "1";
+            } else {
+                result = "1";
+            }
+            continue;
+        }
+
+        if (result.length < nextNumber.length) {
+            return "0";
+        }
+
+        while (checkIndex < result.length) {
+
+            let tmpNumber = "";
+            let indexOfMultiply = 1;
+
+            if (isFirstBiggerOrSame(currentNumber, nextNumber)) {
+
+                while (true) {
+
+                    tmpNumber = multiplyNumbers(nextNumber, String(indexOfMultiply));
+
+                    if (isFirstBiggerOrSame(currentNumber, tmpNumber)) {
+                        indexOfMultiply++;
+                    } else {
+                        tmpResult.push(indexOfMultiply - 1);
+                        currentNumber = subtractionNumbers(currentNumber, multiplyNumbers(nextNumber, String(indexOfMultiply - 1)));
+                        break;
+                    }
+                }
+                currentNumber += result[checkIndex];
+                checkIndex++;
+            }
+            else {
+                tmpResult.push(0);
+                currentNumber += result[checkIndex];
+                checkIndex++;
+            }
+        }
+
+        result = tmpResult.join("");
+
+        if (resultIsNegative ^ nextNumberIsNegative) {
+            result = "-" + result;
+        }
+
+    }
+    return result;
+}
