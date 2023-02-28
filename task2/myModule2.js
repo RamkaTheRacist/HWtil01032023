@@ -5,7 +5,7 @@
     * @param {string} second Second string
     * @returns {boolean} Return true/false if `first` string more than `second` or strings are same
     */
-function isFirstBiggerOrSame(first, second) {                             //service func
+export function isFirstBiggerOrSame(first, second) {                             //service func
 
     first = (first[0] == "-") ? first.slice(1) : first;
     second = (second[0] == "-") ? second.slice(1) : second;
@@ -40,7 +40,7 @@ function isFirstBiggerOrSame(first, second) {                             //serv
     * @param {string} args Input numbers as strings
     * @returns {string} Return string of summed numbers
     */
-function sumNumbers(...args) {       //Строка проверна на пробелы, неправильные символы
+export function sumNumbers(...args) {       //Строка проверна на пробелы, неправильные символы
 
     if (args.length == 0) {
         //Не уверен, лучше Exception выбросить или бросить null
@@ -151,7 +151,7 @@ function sumNumbers(...args) {       //Строка проверна на про
     * @param {string} args Input numbers as strings
     * @returns {string} Return string of subtracted numbers
     */
-function subtractionNumbers(...args) {       //Строка проверна на пробелы, неправильные символы
+export function subtractionNumbers(...args) {       //Строка проверна на пробелы, неправильные символы
 
     if (args.length == 0) {
         //Не уверен, лучше Exception выбросить или бросить null
@@ -193,7 +193,7 @@ function subtractionNumbers(...args) {       //Строка проверна н�
     * @param {string} args Input numbers as strings
     * @returns {string} Return string of multiply numbers
     */
-function multiplyNumbers(...args) {       //Строка проверна на пробелы, неправильные символы
+export function multiplyNumbers(...args) {       //Строка проверна на пробелы, неправильные символы
 
     if (args.length == 0) {
         //Не уверен, лучше Exception выбросить или бросить null
@@ -306,7 +306,7 @@ function multiplyNumbers(...args) {       //Строка проверна на �
     * @param {string} args Input numbers as strings
     * @returns {string} Return string of multiply numbers
     */
-function divideNumbers(...args) {       //Строка проверна на пробелы, неправильные символы
+export function divideNumbers(...args) {       //Строка проверна на пробелы, неправильные символы
 
     if (args.length == 0) {
         //Не уверен, лучше Exception выбросить или бросить null
