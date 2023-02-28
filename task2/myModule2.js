@@ -260,7 +260,7 @@ function multiplyNumbers(...args) {       //Строка проверна на �
                     tmpDigit = 0;
                 }
             }
-            
+
 
             tmpDigit = 0;
 
@@ -337,7 +337,7 @@ function divideNumbers(...args) {       //Строка проверна на п�
         let nextNumber = (nextNumberIsNegative) ? args[i].slice(1) : args[i];
         let currentNumber = result.slice(0, nextNumber.length);
         let tmpResult = [];
-        let checkIndex = nextNumber.length - 1;
+        let checkIndex = nextNumber.length;
 
         if (!isFirstBiggerOrSame(currentNumber, nextNumber)) {
 
@@ -359,7 +359,7 @@ function divideNumbers(...args) {       //Строка проверна на п�
             return "0";
         }
 
-        while (checkIndex < result.length) {
+        while (checkIndex <= result.length) {
 
             let tmpNumber = "";
             let indexOfMultiply = 1;
@@ -367,7 +367,6 @@ function divideNumbers(...args) {       //Строка проверна на п�
             if (isFirstBiggerOrSame(currentNumber, nextNumber)) {
 
                 while (true) {
-
                     tmpNumber = multiplyNumbers(nextNumber, String(indexOfMultiply));
 
                     if (isFirstBiggerOrSame(currentNumber, tmpNumber)) {
@@ -397,10 +396,3 @@ function divideNumbers(...args) {       //Строка проверна на п�
     }
     return result;
 }
-
-
-let a = "199987534980909090999";
-let b = "80901";
-
-console.log(divideNumbers(a, b));
-console.log(BigInt(a) / BigInt(b));
