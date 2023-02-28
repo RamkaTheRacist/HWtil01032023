@@ -9,6 +9,7 @@ export function transformStringFirstLetterUpOtherLow(string) {
     if (!string) {
         return string;
     }
+
     return string[0].toUpperCase() + string.slice(1).toLowerCase();
 }
 /**
@@ -18,9 +19,11 @@ export function transformStringFirstLetterUpOtherLow(string) {
  * @returns {string} Returns string
  */
 export function transformStringWithRightSpaces(string) {
+
     if (!string) {
         return string;
     }
+
     return string.replace(/(\s{2})|(\s(?=\p{P}))/gu, "").replace(/(\p{P}(?=\S))/gui, '$1 ');
 }
 /**
@@ -29,18 +32,22 @@ export function transformStringWithRightSpaces(string) {
  * @param {string} string Input data
  * @returns {number} Returns count of words or `-1` as error
  */
-export function showCountOfWords(string) {                               //Если в строке есть числа и прочий мусор     
+export function showCountOfWords(string) {                               //Если в строке есть числа и прочий мусор  
+
     if (!string) {
         return -1;
     }
+
     let result = 0;
     let tmpArray = string.replace(/(\p{P})|(\d+)|([+])/gu, " ").split(" ");
+
     for (const key of tmpArray) {
         if (key == "") {
             continue;
         }
         result++;
     }
+
     return result;
 }
 // /**
@@ -60,12 +67,16 @@ export function showCountOfWords(string) {                               //Ес�
  * @returns {Array[]} Returns sorted array of arrays with `[word, number]` where firsts are not unique words
  */
 export function showCountOfUniqueWords(string) {
+
     let resultObject = {};
     let array = string.replace(/(\p{P})|(\d+)|([-+/*]+)/gu, "").toLowerCase().split(" ");
+
     for (const item of array) {
+
         if (item == "") {
             continue;
         }
+        
         if (!resultObject[item]) {
             resultObject[item] = 1;
         } else {
