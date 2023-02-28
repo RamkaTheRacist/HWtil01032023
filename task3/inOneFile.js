@@ -85,6 +85,7 @@ class Product {
  * @returns {Array} Filtered array of `Product`
  */
 function filterArray(string, array) {
+    
     if (!string || !array.length) {
         //return -1;                              //Либо код ошибки
         throw new Error("String or array is empty")   //Либо exception
@@ -93,6 +94,7 @@ function filterArray(string, array) {
     let tasksArray = string.split("&").map(item => item.split("-"));
 
     for (let i = 0; i < tasksArray.length; i++) {
+
         if (tasksArray[i].length > 3) {
             throw new Error(`Syntax error: "${string}"`);
         }
@@ -121,6 +123,7 @@ function filterArray(string, array) {
                 throw new Error(`Unknown filter: "${string}"`);
         }
     }
+
     return array;
 
     /**
@@ -131,14 +134,17 @@ function filterArray(string, array) {
     * @returns {RegExp} RegExp for filter
     */
     function createRegForStringOperation(operation, reg) {
+
         let methodString = {
             "contains": new RegExp(reg),
             "ends": new RegExp(reg + "$"),
             "starts": new RegExp("^" + reg)
         };
+
         if (methodString.hasOwnProperty(operation)) {
             return methodString[operation];
         }
+
         throw new Error(`Cant find operation: "${operation}"`);
     };
 
@@ -150,6 +156,7 @@ function filterArray(string, array) {
     * @returns {Function} Function for `array.filter()`
     */
     function createOperationForNumber(array, numberFromArray) {
+
         let methodNumber = {
             ">": (a, b) => a > b,
             ">=": (a, b) => a >= b,
@@ -171,6 +178,7 @@ function filterArray(string, array) {
         if (tmpNumber == "" || tmpNumber.includes(" ")) {
             throw new Error(`Number for searching can not be empty or has spaces`);
         }
+
         if (methodNumber.hasOwnProperty(operation)) {
             return methodNumber[operation](numberFromArray, tmpNumber);
         }
@@ -180,12 +188,14 @@ function filterArray(string, array) {
 
 
 let array = [];
+
 for (let i = 0; i < 10; i++) {
     array[i] = new Product(`Any${i + 1}`, `${(i + 1) * 10}`, `${i + 1}`, `desc${i + 1}`);
 }
+
 array.push(new Product("Test pgf", "2", "2", "2"));
 array.push(new Product("Test pgf2", "24", "23", "ssdadas"));
 
-let string = "name-contains-n&price->2&quantity->=7&description-contains-es";
+let string = "name-contains-&price->2&quantity->=7&description-contains-es";
 
 console.log(filterArray(string, array));

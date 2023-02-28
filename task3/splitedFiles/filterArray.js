@@ -6,6 +6,7 @@
  * @returns {Array} Filtered array of `Product`
  */
 export function filterArray(string, array) {
+
     if (!string || !array.length) {
         //return -1;                              //Либо код ошибки
         throw new Error("String or array is empty")   //Либо exception
@@ -14,6 +15,7 @@ export function filterArray(string, array) {
     let tasksArray = string.split("&").map(item => item.split("-"));
 
     for (let i = 0; i < tasksArray.length; i++) {
+
         if (tasksArray[i].length > 3) {
             throw new Error(`Syntax error: "${string}"`);
         }
@@ -52,14 +54,17 @@ export function filterArray(string, array) {
     * @returns {RegExp} RegExp for filter
     */
     function createRegForStringOperation(operation, reg) {
+
         let methodString = {
             "contains": new RegExp(reg),
             "ends": new RegExp(reg + "$"),
             "starts": new RegExp("^" + reg)
         };
+
         if (methodString.hasOwnProperty(operation)) {
             return methodString[operation];
         }
+
         throw new Error(`Cant find operation: "${operation}"`);
     };
 
@@ -71,6 +76,7 @@ export function filterArray(string, array) {
     * @returns {Function} Function for `array.filter()`
     */
     function createOperationForNumber(array, numberFromArray) {
+
         let methodNumber = {
             ">": (a, b) => a > b,
             ">=": (a, b) => a >= b,
@@ -78,6 +84,7 @@ export function filterArray(string, array) {
             "<=": (a, b) => a <= b,
             "=": (a, b) => a == b
         };
+
         let operation = "";
         let tmpNumber = "";
 
@@ -92,9 +99,11 @@ export function filterArray(string, array) {
         if (tmpNumber == "" || tmpNumber.includes(" ")) {
             throw new Error(`Number for searching can not be empty or has spaces`);
         }
+
         if (methodNumber.hasOwnProperty(operation)) {
             return methodNumber[operation](numberFromArray, tmpNumber);
         }
+        
         throw new Error(`Cant find operation: "${operation}"`);
     };
 }
